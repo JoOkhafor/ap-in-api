@@ -131,4 +131,25 @@ const removeUser = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, authUser, updateUser, removeUser };
+const allUsers = async (req, res) => {
+  const authToken = req.headers?.authorization?.split(" ")[1];
+
+  try {
+    if (authToken) {
+      const { _id } = jwt.verify(authToken ?? authToken, SECRET_KEY);
+      const authUser = await userModel.findOne(
+        { _id },
+        { _id: 0, password: 0 }
+      );
+      if (!authUser?.role === "ADMIN")
+        return res.status(402).send({ message: "Unauthorized!" });
+
+      const users = await userModel.find({ _id: { $ne: _id } }, { _id: 0 });
+      return res.status(200).send({ users });
+    }
+  } catch (error) {
+    return res.status(500).send({ message: error.message });
+  }
+};
+
+module.exports = { registerUser, authUser, updateUser, removeUser, allUsers };
