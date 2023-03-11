@@ -16,13 +16,13 @@ app.use(express.json())
 require('./utils/errorhandling')
 
 // Routes
-app.use("/user", userRouter)
+app.use("/users", userRouter)
 app.get("/", (req, res) => {
     res.send({ message: "This is an Api server" }).status(200)
 })
 
 // Connection
-const PORT = process.env.PORT || 9000
+const PORT = process.env.PORT || 5000
 app.listen(PORT, () => {
     console.log('App running in port: ' + PORT)
 })
