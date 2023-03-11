@@ -1,13 +1,14 @@
 const userModel = require("../models/user.model")
 const jwt = require('jsonwebtoken');
-
+const bcrypt = require("bcrypt")
+const validator = require("validator")
 
 // create user token function 
 const createToken = (_id) => {
 
     const jwtkey = process.env.JWT_SECRET_KEY
 
-    return jwt.sign({ _id }, jwtkey, { expiresIn: "3d" })
+    return jwt.sign({ _id }, jwtkey, { expiresIn: "5h" })
 }
 
 // Register a new user
@@ -18,7 +19,7 @@ const registerUser = async (req, res) => {
  
         let user = await userModel.findOne({ username })
 
-        if (user) return res.status(400).json("User with the given email already exit!");
+        if (user) return res.status(400).json("User with the given username already exit!");
 
         if (!username || !password) return res.status(400).json("All fields are required...");
 
@@ -76,6 +77,7 @@ const loginUser = async (req, res) => {
 
     } catch (error) {
         res.status(500).json(error)
+        console.log(error)
     }
 }
 
