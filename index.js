@@ -1,8 +1,11 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const userRouter = require('./routes/user.route');
 require("dotenv").config({ path: "./config/.env" })
+
+// Routes importing
+const userRouter = require('./routes/user.route');
+const visitRoutes = require("./routes/visitor.route")
 
 // Mongo DB Connections
 require("./config/db")
@@ -17,12 +20,10 @@ require('./utils/errorhandling')
 
 // Routes
 app.use("/users", userRouter)
-app.get("/", (req, res) => {
-    res.send({ message: "This is an Api server" }).status(200)
-})
+app.use("/visit", visitRoutes)
 
 // Connection
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 5001
 app.listen(PORT, () => {
     console.log('App running in port: ' + PORT)
 })
