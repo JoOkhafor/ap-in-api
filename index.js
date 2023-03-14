@@ -9,9 +9,7 @@ require("./config/db")
 
 
 // Middleware Connections
-app.use(cors({
-    origin: "*"
-}))
+app.use(cors())
 app.use(express.json())
 
 // error handling
