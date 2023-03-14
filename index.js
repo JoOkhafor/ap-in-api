@@ -6,6 +6,7 @@ require("dotenv").config({ path: "./config/.env" })
 // Routes importing
 const userRouter = require('./routes/user.route');
 const visitRoutes = require("./routes/visitor.route")
+const newsletterRoutes = require("./routes/newsletter.route")
 
 // Mongo DB Connections
 require("./config/db")
@@ -20,7 +21,8 @@ require('./utils/errorhandling')
 
 // Routes
 app.use("/users", userRouter)
-app.use("/visit", visitRoutes)
+app.use("/visits", visitRoutes)
+app.use("/newsletters", newsletterRoutes)
 
 // Connection
 const PORT = process.env.PORT || 5001

@@ -9,6 +9,6 @@ const newsletterSchema = new mongoose.Schema({
     timestamps: true,
 });
 
-const NewsletterModel = mongoose.model('newsletter.model', newsletterSchema)
+const NewsletterModel = mongoose.model('newsletters', newsletterSchema)
 
 module.exports = NewsletterModel
