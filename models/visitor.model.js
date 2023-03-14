@@ -6,7 +6,11 @@ const visitorSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        count: {
+        month: {
+            type: String,
+            required: true,
+        },
+        day: {
             type: Number,
             default: 0,
         },
