@@ -29,15 +29,7 @@ const quoteSchema = new mongoose.Schema(
         description: {
             type: String,
             required: true,
-        },
-        picture: {
-            type: String,
-            required: true,
-        },
-        date: {
-            type: Date,
-            required: true,
-        },
+        }
     },
     {
         timestamps: true,
