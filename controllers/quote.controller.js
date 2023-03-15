@@ -45,6 +45,7 @@ const registerQuote = async (req, res) => {
 
 const deleteOneQuote = async (req, res) => {
     const { id } = req.params;
+    if (!id) return res.status(400).send({ message: "Bad request" });
     try {
         const quote = await Quotes.deleteOne({ _id: id });
         if (!quote || !quote.deletedCount) {
@@ -67,6 +68,7 @@ const deleteOneQuote = async (req, res) => {
 
 const getOneQuote = async (req, res) => {
     const _id = req.params.id;
+    if (!_id) return res.status(400).send({ message: "Bad request" });
     try {
         const quote = await Quotes.findOne({ _id });
         if (!quote)
