@@ -1,5 +1,11 @@
 const NewsletterModel = require("../models/newsletter.model");
 
+/**
+|--------------------------------------------------
+| newsletter register
+|--------------------------------------------------
+*/
+
 register = async (req, res) => {
     const email = req.body.email;
 
@@ -18,6 +24,12 @@ register = async (req, res) => {
     }
 };
 
+/**
+|--------------------------------------------------
+| newsletter geting all emails
+|--------------------------------------------------
+*/
+
 getAllNewsletters = async (req, res) => {
     try {
         const newsletters = await NewsletterModel.find();
@@ -26,6 +38,12 @@ getAllNewsletters = async (req, res) => {
         res.status(500).send({ message: "Something went wrong" });
     }
 };
+
+/**
+|--------------------------------------------------
+| newsletter deleting one email
+|--------------------------------------------------
+*/
 
 deleteEmail = async (req, res) => {
     const _id = req.params.id;
@@ -40,13 +58,18 @@ deleteEmail = async (req, res) => {
     }
 };
 
+/**
+|--------------------------------------------------
+| newsletter delete many emails
+|--------------------------------------------------
+*/
+
 deleteMany = async (req, res) => {
     const items = req.body;
-    console.log(items);
     try {
         items?.map(async (_id, item) => {
             const deleted = await NewsletterModel.deleteOne({ _id });
-            if (!deleted || !deleted.deletedCount) {
+            if (!deleted) {
                 return res
                     .status(400)
                     .send({ message: "Something went wrong !!!" });
@@ -57,6 +80,12 @@ deleteMany = async (req, res) => {
         res.status(500).send({ message: "Something went wrong" });
     }
 };
+
+/**
+|--------------------------------------------------
+| newsletter delete one emails
+|--------------------------------------------------
+*/
 
 updateEmail = async (req, res) => {
     const _id = req.params.id;
@@ -75,6 +104,12 @@ updateEmail = async (req, res) => {
         res.status(500).send({ message: "Something went wrong" });
     }
 };
+
+/**
+|--------------------------------------------------
+| exporting controllers
+|--------------------------------------------------
+*/
 
 module.exports = {
     register,
