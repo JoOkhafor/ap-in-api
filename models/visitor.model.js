@@ -6,14 +6,18 @@ const visitorSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        month: {
+        day: {
             type: String,
             required: true,
         },
-        day: {
-            type: Number,
-            default: 0,
+        month: {
+            type: String,
+            required: true
         },
+        year: {
+            type: String,
+            required: true
+        }
     },
     {
         timestamps: true,
