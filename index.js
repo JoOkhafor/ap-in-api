@@ -26,7 +26,7 @@ app.use("/newsletters", newsletterRoutes);
 app.use("/quotes", quotesRoutes);
 
 // Connection
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log("App running in port: " + PORT);
 });

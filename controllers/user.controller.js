@@ -18,13 +18,15 @@ const registerUser = async (req, res) => {
     let user = await userModel.findOne({ email });
 
     if (user)
-      return res.status(400).json("User with the given email already exit!");
+      return res
+        .status(404)
+        .json({ message: "User with the given email already exit!" });
 
     if (!email || !password)
-      return res.status(400).json("All fields are required...");
+      return res.status(404).json({ message: "All fields are required..." });
 
     if (!validator.isEmail(email))
-      return res.status(400).json("Email format is wrong...");
+      return res.status(404).json({ message: "Email format is wrong..." });
     if (
       !validator.isStrongPassword(password, {
         minSymbols: 0,
@@ -33,7 +35,9 @@ const registerUser = async (req, res) => {
         minNumbers: 1,
       })
     )
-      return res.status(400).json("Password must be strong password...");
+      return res
+        .status(404)
+        .json({ message: "Password must be strong password..." });
 
     user = new userModel({
       email,
@@ -60,21 +64,21 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password)
-    return res.status(400).json("All fields are required...");
+    return res.status(404).json({ message: "All fields are required..." });
   try {
     let user = await userModel.findOne({ email });
 
     if (!user || !user.email)
-      return res.status(400).json({ message: "Invalid email or password" });
+      return res.status(404).json({ message: "Invalid email or password" });
 
     const isValidPassword = await bcrypt.compare(password, user.password);
 
     if (!email || !password)
-      return res.status(400).json("All fields are required...");
+      return res.status(404).json({ message: "All fields are required..." });
     if (!validator.isEmail(email))
-      return res.status(400).json("Email format is wrong...");
+      return res.status(404).json({ message: "Email format is wrong..." });
     if (!isValidPassword)
-      return res.status(400).json("Invalid email or password");
+      return res.status(404).json({ message: "Invalid email or password" });
 
     let token = createToken(user._id);
 
