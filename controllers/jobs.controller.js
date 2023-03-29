@@ -7,9 +7,9 @@ const JobModel = require("../models/job.model");
 |--------------------------------------------------
 */
 const getOneJob = async (req, res) => {
-  const { _id } = req.params;
+  const { title } = req.params;
   try {
-    const job = await JobModel.findOne({ _id });
+    const job = await JobModel.findOne({ title });
     if (!job) return res.status(404).send({ message: "Data not found!" });
     res.status(200).send(job);
   } catch (error) {
@@ -52,7 +52,8 @@ const addNewJob = async (req, res) => {
     location,
     details,
   } = req.body;
-  if (!title || title == "") return res.status(300).send({ message: "no data specified!" });
+  if (!title || title == "")
+    return res.status(300).send({ message: "no data specified!" });
   try {
     const job = await JobModel.findOne({ title });
     if (job)
@@ -101,6 +102,11 @@ const updateJob = async (req, res) => {
   }
 };
 
+/**
+|--------------------------------------------------
+| delete a job 
+|--------------------------------------------------
+*/
 const deleteJob = async (req, res) => {
   const { _id } = req.params;
   if (!_id) return res.status(302).send({ message: "No job specified" });
