@@ -45,9 +45,9 @@ const ApplicationRegister = async (req, res) => {
       email,
       phone_number,
       location,
-      cv: req.file.filename,
       profile,
       motivation,
+      cv: req.file.filename,
     });
     const data = await newApplication.save();
     // upload.single("file");
