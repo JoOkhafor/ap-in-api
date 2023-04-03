@@ -40,6 +40,6 @@ const applicationSchema = new mongoose.Schema(
   }
 );
 
-const ApplicationModel = mongoose.model("application.model", applicationSchema);
+const ApplicationModel = mongoose.model("applications", applicationSchema);
 
 module.exports = ApplicationModel;
