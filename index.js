@@ -9,7 +9,7 @@ const visitRoutes = require("./routes/visitor.routes");
 const newsletterRoutes = require("./routes/newsletter.routes");
 const quotesRoutes = require("./routes/quote.routes");
 const jobsRoutes = require("./routes/jobs.routes");
-const applicationsRoutes = require("./routes/application.routes")
+const applicationsRoutes = require("./routes/application.routes");
 
 // Mongo DB Connections
 require("./config/db");
@@ -17,6 +17,11 @@ require("./config/db");
 // Middleware Connections
 app.use(cors());
 app.use(express.json());
+app.use(
+  express.urlencoded({
+    extended: true,
+  })
+);
 
 // error handling
 require("./utils/errorhandling");
@@ -27,7 +32,7 @@ app.use("/visits", visitRoutes);
 app.use("/newsletters", newsletterRoutes);
 app.use("/quotes", quotesRoutes);
 app.use("/jobs", jobsRoutes);
-app.use("/applications", applicationsRoutes)
+app.use("/applications", applicationsRoutes);
 
 // Connection
 const PORT = process.env.PORT || 5000;
