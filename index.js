@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const bodyParser = require("body-parser");
 require("dotenv").config({ path: "./config/.env" });
 
 // Routes importing
@@ -18,7 +19,7 @@ require("./config/db");
 app.use(cors());
 app.use(express.json());
 app.use(
-  express.urlencoded({
+  bodyParser.urlencoded({
     extended: true,
   })
 );
