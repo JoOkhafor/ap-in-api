@@ -1,8 +1,8 @@
 const ApplicationModel = require("../models/application.model");
 
 async function Register(req, res) {
-  const body = req.body;
-  res.send({ body });
+  const data = req.query;
+  res.send(data);
 }
 
 const getApplications = async (req, res) => {
@@ -17,7 +17,6 @@ const getApplications = async (req, res) => {
 };
 
 module.exports = { Register, getApplications };
-
 
 const ApplicationRegister = async (req, res) => {
   const { fullname, email, phone_number, location, profile, motivation } =
