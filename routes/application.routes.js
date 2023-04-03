@@ -1,12 +1,12 @@
 const { Router } = require("express");
 const {
-  ApplicationRegister,
   getApplications,
+  Register,
 } = require("../controllers/application.controller");
 
 const router = Router();
 
-router.post("/register", (req, res) => console.log(req));
+router.post("/register", Register);
 router.get("/", getApplications);
 
 module.exports = router;
