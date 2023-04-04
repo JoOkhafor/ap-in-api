@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const {
-  getApplications,
   Register,
+  getApplications,
 } = require("../controllers/application.controller");
 
 const router = Router();

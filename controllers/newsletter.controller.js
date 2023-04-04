@@ -6,7 +6,7 @@ const NewsletterModel = require("../models/newsletter.model");
 |--------------------------------------------------
 */
 
-register = async (req, res) => {
+const register = async (req, res) => {
     const email = req.body.email;
 
     try {
@@ -30,7 +30,7 @@ register = async (req, res) => {
 |--------------------------------------------------
 */
 
-getAllNewsletters = async (req, res) => {
+const getAllNewsletters = async (req, res) => {
     try {
         const newsletters = await NewsletterModel.find();
         res.status(200).send(newsletters);
@@ -45,7 +45,7 @@ getAllNewsletters = async (req, res) => {
 |--------------------------------------------------
 */
 
-deleteEmail = async (req, res) => {
+const deleteEmail = async (req, res) => {
     const _id = req.params.id;
     try {
         const deleted = await NewsletterModel.deleteOne({ _id });
@@ -64,7 +64,7 @@ deleteEmail = async (req, res) => {
 |--------------------------------------------------
 */
 
-deleteMany = async (req, res) => {
+const deleteMany = async (req, res) => {
     const items = req.body;
     try {
         items?.map(async (_id, item) => {
@@ -87,7 +87,7 @@ deleteMany = async (req, res) => {
 |--------------------------------------------------
 */
 
-updateEmail = async (req, res) => {
+const updateEmail = async (req, res) => {
     const _id = req.params.id;
     const newEmail = req.body.email;
     try {
