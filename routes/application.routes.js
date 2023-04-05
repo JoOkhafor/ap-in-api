@@ -6,7 +6,7 @@ const {
 
 const router = Router();
 
-router.post("/register", Register);
+router.post("/apply", Register);
 router.get("/", getApplications);
 
 module.exports = router;
