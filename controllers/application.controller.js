@@ -1,8 +1,10 @@
 const ApplicationModel = require("../models/application.model");
 
 const getApplications = async (req, res) => {
+  const { jobId } = req.params;
+  console.log(jobId)
   try {
-    const data = await ApplicationModel.find();
+    const data = await ApplicationModel.find({ jobId });
     if (!data.length)
       return res.status(404).send({ message: "No data found!" });
     res.status(200).send(data);
@@ -11,12 +13,17 @@ const getApplications = async (req, res) => {
   }
 };
 
-
 const ApplicationRegister = async (req, res) => {
-  console.log(req)
 
-  const { fullname, jobId, email, phone_number, location, profile, motivation } =
-    req.body;
+  const {
+    fullname,
+    jobId,
+    email,
+    phone_number,
+    location,
+    profile,
+    motivation,
+  } = req.body;
   if (
     !fullname ||
     !email ||
@@ -56,4 +63,4 @@ const ApplicationRegister = async (req, res) => {
   }
 };
 
-  module.exports = { getApplications, ApplicationRegister };
+module.exports = { getApplications, ApplicationRegister };

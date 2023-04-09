@@ -8,6 +8,6 @@ const {
 const router = Router();
 
 router.post("/register", upload.single("file"), ApplicationRegister);
-router.get("/", getApplications); 
+router.get("/find/:jobId", getApplications);
 
 module.exports = router;
