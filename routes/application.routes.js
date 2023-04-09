@@ -1,12 +1,13 @@
 const { Router } = require("express");
+const { upload } = require("../uploads/multer");
 const {
-  Register,
   getApplications,
+  ApplicationRegister,
 } = require("../controllers/application.controller");
 
 const router = Router();
 
-router.post("/apply", Register);
-router.get("/", getApplications);
+router.post("/register", upload.single("file"), ApplicationRegister);
+router.get("/", getApplications); 
 
 module.exports = router;
