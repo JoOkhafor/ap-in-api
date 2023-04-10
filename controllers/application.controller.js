@@ -1,8 +1,9 @@
 const ApplicationModel = require("../models/application.model");
+const fs = require("fs");
 
 const getApplications = async (req, res) => {
   const { jobId } = req.params;
-  console.log(jobId)
+  console.log(jobId);
   try {
     const data = await ApplicationModel.find({ jobId });
     if (!data.length)
@@ -14,7 +15,6 @@ const getApplications = async (req, res) => {
 };
 
 const ApplicationRegister = async (req, res) => {
-
   const {
     fullname,
     jobId,
@@ -53,7 +53,6 @@ const ApplicationRegister = async (req, res) => {
       cv: req.file.filename,
     });
     const data = await newApplication.save();
-    // upload.single("file");
     res.status(200).send({
       ...data._doc,
       message: "Your appication is registered successfully !",
@@ -63,4 +62,39 @@ const ApplicationRegister = async (req, res) => {
   }
 };
 
-module.exports = { getApplications, ApplicationRegister };
+const downloadFile = async (req, res) => {
+  const { filename } = req.params;
+  if (!filename) return res.status(400).send({ message: "Not Found!" });
+  try {
+    const filenameLocation = path.join("../uploads/docs", filename);
+    console.log(filenameLocation);
+    res.download(filenameLocation, filename);
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+};
+
+const deleteOneApplication = async (req, res) => {
+  const { id } = req.params;
+  if (!id) return res.status(404).send({ message: "Not Found!" });
+  try {
+    const data = await ApplicationModel.findOneAndDelete({ _id: id });
+    console.log(data)
+    if (!data.deletedCount)
+      return res.status(404).send({ message: "Not Found!" });
+    const cvLocation = path.join("../uploads/docs", data.cv);
+    fs.unlink(cvLocation, () => {
+      console.log("deleted!");
+    });
+    res.status(200).send({ message: "deleted success!" });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+};
+
+module.exports = {
+  getApplications,
+  ApplicationRegister,
+  downloadFile,
+  deleteOneApplication,
+};

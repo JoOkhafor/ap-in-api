@@ -1,13 +1,16 @@
 const { Router } = require("express");
+const router = Router();
 const { upload } = require("../uploads/multer");
 const {
   getApplications,
   ApplicationRegister,
+  downloadFile,
+  deleteOneApplication,
 } = require("../controllers/application.controller");
-
-const router = Router();
 
 router.post("/register", upload.single("file"), ApplicationRegister);
 router.get("/find/:jobId", getApplications);
+router.get("/file/:filename", downloadFile);
+router.get("/delete/:id", deleteOneApplication);
 
-module.exports = router;
+module.exports = router; 
