@@ -72,15 +72,13 @@ const downloadFile = async (req, res) => {
   console.log(filename);
   if (!filename) return res.status(400).send({ message: "Not Found!" });
   try {
-    const doc = path.join(`uploads/docs/${filename}`);
-    const file = fs.createReadStream(doc);
     res
       .set({
         Headers: {
           "Content-Type": "application/pdf",
         },
       })
-      .send(file);
+      .download(`uploads/docs/${filename}`);
   } catch (error) {
     res.status(500).send({ message: error.message });
   }
