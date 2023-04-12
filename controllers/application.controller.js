@@ -1,3 +1,4 @@
+const path = require("path");
 const ApplicationModel = require("../models/application.model");
 const fs = require("fs");
 
@@ -38,10 +39,14 @@ const ApplicationRegister = async (req, res) => {
     return res.status(400).send({ message: "Please provide your CV file !" });
   try {
     const application = await ApplicationModel.findOne({ email });
-    if (application)
+    if (application) {
+      fs.unlink(`uploads/docs/${req.file.filename}`, (err) => {
+        if (err) throw err;
+      });
       return res.status(402).send({
         message: "Seems like someone with this email already applied !",
       });
+    }
     const newApplication = new ApplicationModel({
       fullname,
       email,
@@ -64,11 +69,18 @@ const ApplicationRegister = async (req, res) => {
 
 const downloadFile = async (req, res) => {
   const { filename } = req.params;
+  console.log(filename);
   if (!filename) return res.status(400).send({ message: "Not Found!" });
   try {
-    const filenameLocation = path.join("../uploads/docs", filename);
-    console.log(filenameLocation);
-    res.download(filenameLocation, filename);
+    const doc = path.join(`uploads/docs/${filename}`);
+    const file = fs.createReadStream(doc);
+    res
+      .set({
+        Headers: {
+          "Content-Type": "application/pdf",
+        },
+      })
+      .send(file);
   } catch (error) {
     res.status(500).send({ message: error.message });
   }
@@ -79,12 +91,9 @@ const deleteOneApplication = async (req, res) => {
   if (!id) return res.status(404).send({ message: "Not Found!" });
   try {
     const data = await ApplicationModel.findOneAndDelete({ _id: id });
-    console.log(data)
-    if (!data.deletedCount)
-      return res.status(404).send({ message: "Not Found!" });
-    const cvLocation = path.join("../uploads/docs", data.cv);
-    fs.unlink(cvLocation, () => {
-      console.log("deleted!");
+    if (!data) return res.status(404).send({ message: "Not Found!" });
+    fs.unlink(`uploads/docs/${data.cv}`, (err) => {
+      if (err) throw err;
     });
     res.status(200).send({ message: "deleted success!" });
   } catch (error) {
