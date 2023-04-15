@@ -20,8 +20,6 @@ errors.use(function (req, res, next) {
 
 // handle errors
 errors.use(function (err, req, res, next) {
-    console.log(err);
-
     if (err.status === 404)
         res.status(404).json({ message: "Not found" });
     else

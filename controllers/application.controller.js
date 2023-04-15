@@ -4,7 +4,6 @@ const fs = require("fs");
 
 const getApplications = async (req, res) => {
   const { jobId } = req.params;
-  console.log(jobId);
   try {
     const data = await ApplicationModel.find({ jobId });
     if (!data.length)
@@ -69,7 +68,6 @@ const ApplicationRegister = async (req, res) => {
 
 const downloadFile = async (req, res) => {
   const { filename } = req.params;
-  console.log(filename);
   if (!filename) return res.status(400).send({ message: "Not Found!" });
   try {
     res

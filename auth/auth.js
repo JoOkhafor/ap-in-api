@@ -16,7 +16,6 @@ function Auth(req, res, next) {
       });
     }
     const decode = jwt.verify(token, SECRET_KEY);
-    console.log(decode);
     if (req.body.user === decode._id) return res.status(200).json(decode);
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
