@@ -44,7 +44,7 @@ const addNewJob = async (req, res) => {
   try {
     const job = await JobModel.findOne({ title });
     if (job)
-      return res.status(300).send({ message: "Job title already exits!" });
+      return res.status(300).send({ message: "Job already exits!" });
     const newJob = new JobModel(req.body);
     await newJob.save();
     res.status(200).send({ message: "Job saved successfully!" });
