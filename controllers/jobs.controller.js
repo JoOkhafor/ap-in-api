@@ -1,4 +1,3 @@
-const { findOne } = require("../models/job.model");
 const JobModel = require("../models/job.model");
 
 /**
@@ -39,38 +38,14 @@ const getJobs = async (req, res) => {
 |--------------------------------------------------
 */
 const addNewJob = async (req, res) => {
-  const {
-    title,
-    lowParagraph,
-    activity,
-    enterprise,
-    time,
-    validity,
-    level,
-    category,
-    workplace,
-    location,
-    details,
-  } = req.body;
+  const { title } = req.body;
   if (!title || title == "")
-    return res.status(300).send({ message: "no data specified!" });
+    return res.status(300).send({ message: "Title must be specified!" });
   try {
     const job = await JobModel.findOne({ title });
     if (job)
       return res.status(300).send({ message: "Job title already exits!" });
-    const newJob = new JobModel({
-      title,
-      lowParagraph,
-      activity,
-      enterprise,
-      time,
-      validity,
-      level,
-      category,
-      workplace,
-      location,
-      details,
-    });
+    const newJob = new JobModel(req.body);
     await newJob.save();
     res.status(200).send({ message: "Job saved successfully!" });
   } catch (error) {
