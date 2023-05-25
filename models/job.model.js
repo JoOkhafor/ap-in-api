@@ -5,16 +5,17 @@ const jobSchema = new mongoose.Schema(
     title: {
       type: String,
     },
-    lowParagraph: {
+    description: {
       type: String,
     },
     activity: {
       type: Boolean,
+      default: true
     },
     enterprise: {
       type: String,
     },
-    time: {
+    worktime: {
       type: String,
     },
     validity: {
@@ -26,7 +27,7 @@ const jobSchema = new mongoose.Schema(
     category: {
       type: String,
     },
-    workplace: {
+    worktype: {
       type: String,
     },
     location: {
