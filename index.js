@@ -6,11 +6,11 @@ require("dotenv").config({ path: "./config/.env" });
 
 // Routes importing
 const userRouter = require("./routes/user.routes");
-const visitRoutes = require("./routes/visitor.routes");
 const newsletterRoutes = require("./routes/newsletter.routes");
 const quotesRoutes = require("./routes/quote.routes");
 const jobsRoutes = require("./routes/jobs.routes");
 const applicationsRoutes = require("./routes/application.routes");
+const visitsRoutes = require("./routes/visit.routes");
 
 // Mongo DB Connections
 require("./config/db");
@@ -29,11 +29,11 @@ require("./utils/errorhandling");
 
 // Routes
 app.use("/users", userRouter);
-app.use("/visits", visitRoutes);
 app.use("/newsletters", newsletterRoutes);
 app.use("/quotes", quotesRoutes);
 app.use("/jobs", jobsRoutes);
 app.use("/applications", applicationsRoutes);
+app.use("/", visitsRoutes);
 
 // Connection
 const PORT = process.env.PORT || 5000;

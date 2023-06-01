@@ -1,55 +1,42 @@
 const Visitor = require("../models/visitor.model");
+const { tokenCheck, createToken } = require("../utils/token");
 
-const incrementVisitorCount = async (req, res) => {
-    const category = req.params.category;
+async function incrementVisitorCount(req, res) {
+  const { page, token } = req.params;
+  if (!page) return res.status(200);
 
-    try {
-        // Recherche du visiteur pour la catégorie donnée
-        let visitor = await Visitor.findOne({ category });
-
-        // Si le visiteur n'existe pas encore, on le crée avec un compteur initialisé à 1
-        if (!visitor) {
-            visitor = new Visitor({ category });
-        }
-
-        // Incrémentation du compteur et sauvegarde dans la base de données
-        visitor.count++;
-        visitor = await visitor.save();
-
-        // Envoi de la réponse au client
-        res.send({ ...visitor, success: true });
-    } catch (err) {
-        // En cas d'erreur, on renvoie une erreur 500 (erreur serveur)
-        res.status(500).send({ error: "Une erreur est survenue" });
+  const now = new Date().toISOString();
+  const [year, month] = now.split("-");
+  console.log([year, month]);
+  try {
+    const { ok } = tokenCheck(token);
+    if (ok) return res.status(200);
+    const item = await Visitor.find({ page, year, month });
+    if (!item) {
+      await Visitor.create({ page, year, month, number: 1 });
+    } else if (item) {
+      return await Visitor.updateOne(
+        { page, year, month },
+        { number: item?.number + 1 }
+      );
     }
-};
+    const newToken = createToken(page);
+    return res.status(200).send({ newToken });
+  } catch (err) {
+    res.send({ message: "Error" });
+  }
+}
 
-const getVisitorsNumber = async (req, res) => {
-    const category = req.params.category;
+async function getVisitorCount(req, res) {
+  const { page } = req.params;
+  try {
+    const visits = (
+      await Visitor.find({ page }, { id: 0, createdAt: 0, updatedAt: 0 })
+    ).slice(-6);
+    res.status(200).send({ visits });
+  } catch (error) {
+    res.send({ message: "Error" || error?.message });
+  }
+}
 
-    try {
-        // Récupération du nombre de visiteurs actuel pour la catégorie donnée
-        const visitor = await Visitor.findOne({ category });
-
-        // Envoi du nombre de visiteurs au client
-        res.send(visitor);
-    } catch (err) {
-        // En cas d'erreur, on renvoie une erreur 500 (erreur serveur)
-        res.status(500).send({ error: "Une erreur est survenue" });
-    }
-};
-
-const getAll = async (req, res) => {
-    try {
-        // Récupération du nombre de visiteurs actuel pour toutes les catégories
-        const visitors = await Visitor.find();
-
-        // Envoi du nombre de visiteurs au client
-        res.send(visitors);
-    } catch (err) {
-        // En cas d'erreur, on renvoie une erreur 500 (erreur serveur)
-        res.status(500).send({ error: "Une erreur est survenue" });
-    }
-};
-
-module.exports = { incrementVisitorCount, getVisitorsNumber, getAll };
+module.exports = { incrementVisitorCount, getVisitorCount };

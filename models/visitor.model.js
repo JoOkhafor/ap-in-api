@@ -2,20 +2,20 @@ const mongoose = require("mongoose");
 
 const visitorSchema = new mongoose.Schema(
     {
-        category: {
+        page: {
             type: String,
             required: true,
         },
-        day: {
-            type: String,
+        number: {
+            type: Number,
             required: true,
         },
         month: {
-            type: String,
+            type: Number,
             required: true
         },
         year: {
-            type: String,
+            type: Number,
             required: true
         }
     },
