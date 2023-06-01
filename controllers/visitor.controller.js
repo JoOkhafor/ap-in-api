@@ -12,13 +12,15 @@ async function incrementVisitorCount(req, res) {
   console.log({ page, token });
 
   try {
-    const item = await Visitor.find({ page, year, month });
-    await Visitor.create({ page, year, month, number: 1 });
+    const item = await Visitor.findOne({ page, year, month });
     if (!item) {
+      await Visitor.create({ page, year, month, number: 1 });
+    } else if (item) {
+      await Visitor.updateOne(
+        { _id: item?._id },
+        { $set: { number: parseInt(item?.number) + 1 } }
+      );
     }
-    // if (item) {
-    //   return await Visitor.updateOne({ page, year, month }, { number: 0 });
-    // }
     const newToken = createToken(page);
     return res.status(200).send({ newToken });
   } catch (err) {
