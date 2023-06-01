@@ -76,7 +76,6 @@ const loginUser = async (req, res) => {
     let token = createToken(user._id);
 
     res.status(200).json({
-      _id: user._id,
       email,
       token,
     });

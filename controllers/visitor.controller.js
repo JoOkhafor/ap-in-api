@@ -4,26 +4,26 @@ const { tokenCheck, createToken } = require("../utils/token");
 async function incrementVisitorCount(req, res) {
   const now = new Date().toISOString();
   const [year, month] = now.split("-");
-  console.log([year, month]);
-  const { page, token } = req.params;
-  if (!page) return res.status(200);
+  const { page, token } = req.query;
+
+  if (!page) return res.status(200).end();
+  const { ok } = tokenCheck(token);
+  if (ok) return res.status(200).send();
+  console.log({ page, token });
 
   try {
-    const { ok } = tokenCheck(token);
-    if (ok) return res.status(200);
     const item = await Visitor.find({ page, year, month });
+    await Visitor.create({ page, year, month, number: 1 });
     if (!item) {
-      await Visitor.create({ page, year, month, number: 1 });
-    } else if (item) {
-      return await Visitor.updateOne(
-        { page, year, month },
-        { number: item?.number + 1 }
-      );
     }
+    // if (item) {
+    //   return await Visitor.updateOne({ page, year, month }, { number: 0 });
+    // }
     const newToken = createToken(page);
     return res.status(200).send({ newToken });
   } catch (err) {
-    res.send({ message: "Error" });
+    console.log(err);
+    res.send({ message: err?.message });
   }
 }
 

@@ -11,11 +11,11 @@ const visitorSchema = new mongoose.Schema(
             required: true,
         },
         month: {
-            type: Number,
+            type: String,
             required: true
         },
         year: {
-            type: Number,
+            type: String,
             required: true
         }
     },
