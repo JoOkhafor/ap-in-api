@@ -2,12 +2,12 @@ const Visitor = require("../models/visitor.model");
 const { tokenCheck, createToken } = require("../utils/token");
 
 async function incrementVisitorCount(req, res) {
-  const { page, token } = req.params;
-  if (!page) return res.status(200);
-
   const now = new Date().toISOString();
   const [year, month] = now.split("-");
   console.log([year, month]);
+  const { page, token } = req.params;
+  if (!page) return res.status(200);
+
   try {
     const { ok } = tokenCheck(token);
     if (ok) return res.status(200);

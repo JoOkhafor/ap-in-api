@@ -33,7 +33,7 @@ app.use("/newsletters", newsletterRoutes);
 app.use("/quotes", quotesRoutes);
 app.use("/jobs", jobsRoutes);
 app.use("/applications", applicationsRoutes);
-app.use("/", visitsRoutes);
+app.use("/visits", visitsRoutes);
 
 // Connection
 const PORT = process.env.PORT || 5000;

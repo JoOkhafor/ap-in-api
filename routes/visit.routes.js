@@ -6,7 +6,7 @@ const {
 
 const router = Router();
 
-router.post("/visits", incrementVisitorCount);
-router.get("/visits", getVisitorCount);
+router.get("/", incrementVisitorCount);
+router.get("/get", getVisitorCount);
 
 module.exports = router;
