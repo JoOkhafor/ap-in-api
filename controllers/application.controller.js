@@ -4,10 +4,13 @@ const fs = require("fs");
 
 const getApplications = async (req, res) => {
   const { jobId } = req.params;
+  const { length } = req.query;
+  console.log(length);
   try {
     const data = await ApplicationModel.find({ jobId });
     if (!data.length)
       return res.status(404).send({ message: "No data found!" });
+    if (length) return res.status(200).send({ amount: data.length });
     res.status(200).send(data);
   } catch (error) {
     res.status(500).send({ message: error.message });
