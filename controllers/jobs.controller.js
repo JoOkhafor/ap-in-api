@@ -7,9 +7,11 @@ const JobModel = require("../models/job.model");
 */
 const getOneJob = async (req, res) => {
   const { title } = req.params;
+  if (!title) return res.status(401).send({ message: "Unauthorized!" });
   try {
     const job = await JobModel.findOne({ title });
     if (!job) return res.status(404).send({ message: "Data not found!" });
+    await JobModel.updateOne({ _id: job?._id }, { views: job?.views + 1 });
     res.status(200).send(job);
   } catch (error) {
     res.status(500).send(error?.message);
@@ -43,8 +45,7 @@ const addNewJob = async (req, res) => {
     return res.status(300).send({ message: "Title must be specified!" });
   try {
     const job = await JobModel.findOne({ title });
-    if (job)
-      return res.status(300).send({ message: "Job already exits!" });
+    if (job) return res.status(300).send({ message: "Job already exits!" });
     const newJob = new JobModel(req.body);
     await newJob.save();
     res.status(200).send({ message: "Job saved successfully!" });

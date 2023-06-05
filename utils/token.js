@@ -6,7 +6,7 @@ const jwtkey = process.env.JWT_SECRET_KEY;
  * @return {string}
  */
 const createToken = (_id) => {
-  return jwt.sign({ _id }, jwtkey, { expiresIn: "5h" });
+  return jwt.sign({ _id }, jwtkey, { expiresIn: "1h" });
 };
 
 /**

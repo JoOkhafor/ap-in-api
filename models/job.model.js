@@ -10,7 +10,7 @@ const jobSchema = new mongoose.Schema(
     },
     activity: {
       type: Boolean,
-      default: true
+      default: true,
     },
     enterprise: {
       type: String,
@@ -35,6 +35,10 @@ const jobSchema = new mongoose.Schema(
     },
     details: {
       type: String,
+    },
+    views: {
+      type: Number,
+      default: 0,
     },
   },
   {
