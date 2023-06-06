@@ -1,25 +1,28 @@
 const userModel = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const validator = require("validator");
-const { createToken } = require("../utils/token");
+const { createToken, userToken } = require("../utils/token");
+const jwt = require("jsonwebtoken");
+
+//
+const SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 // Register a new user
 const registerUser = async (req, res) => {
+  let { firstName, lastName, email, password } = req.body;
+  if (!email || !password)
+    return res.status(404).json({ message: "All fields are required..." });
   try {
-    const { email, password } = req.body;
-
-    let user = await userModel.findOne({ email });
-
-    if (user)
+    let oldUser = await userModel.findOne({ email });
+    if (oldUser) {
       return res
         .status(404)
         .json({ message: "User with the given email already exit!" });
+    }
 
-    if (!email || !password)
-      return res.status(404).json({ message: "All fields are required..." });
-
-    if (!validator.isEmail(email))
+    if (!validator.isEmail(email)) {
       return res.status(404).json({ message: "Email format is wrong..." });
+    }
     if (
       !validator.isStrongPassword(password, {
         minSymbols: 0,
@@ -27,82 +30,44 @@ const registerUser = async (req, res) => {
         minUppercase: 0,
         minNumbers: 1,
       })
-    )
+    ) {
       return res
         .status(404)
         .json({ message: "Password must be strong password..." });
-
-    user = new userModel({
+    }
+    const salt = await bcrypt.genSalt(10);
+    password = await bcrypt.hash(password, salt);
+    const newUser = new userModel({
+      firstName,
+      lastName,
       email,
       password,
     });
-
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(user.password, salt);
-
-    user.save();
-
-    let token = createToken(user._id);
-
+    console.log({ newUser });
+    await newUser.save();
+    const user = await userModel.findOne({ email }, { _id: 0, password: 0 });
+    const token = userToken(newUser._id);
     res.status(200).json({
-      _id: user._id,
-      email,
+      user,
       token,
     });
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json({ message: error?.message });
   }
 };
 
-const loginUser = async (req, res) => {
+const authUser = (req, res) => {
   const { email, password } = req.body;
-  if (!email || !password)
-    return res.status(404).json({ message: "All fields are required..." });
+  const authorization = req.headers.authorization;
+  const token = authorization.split(" ")[1];
+  console.log(token)
   try {
-    let user = await userModel.findOne({ email });
-
-    if (!user || !user.email)
-      return res.status(404).json({ message: "Invalid email or password" });
-
-    const isValidPassword = await bcrypt.compare(password, user.password);
-
-    if (!email || !password)
-      return res.status(404).json({ message: "All fields are required..." });
-    if (!validator.isEmail(email))
-      return res.status(404).json({ message: "Email format is wrong..." });
-    if (!isValidPassword)
-      return res.status(404).json({ message: "Invalid email or password" });
-
-    let token = createToken(user._id);
-
-    res.status(200).json({
-      ...user,
-      token,
-    });
+    if (!token === undefined || !token === null) {
+      const decode = jwt.verify(token, SECRET_KEY);
+    }
   } catch (error) {
-    res.status(500).json(error);
-    console.log(error);
+    return res.status(500).send({ message: `${error.message}` });
   }
 };
 
-const findUser = async (req, res) => {
-  const userId = req.params.userId;
-
-  try {
-    const user = await userModel.findById(userId);
-    res.status(200).json(user);
-  } catch (error) {
-    res.status(500).json(error);
-  }
-};
-
-const getUsers = async (req, res) => {
-  try {
-    const users = await userModel.find();
-    res.status(200).json(users);
-  } catch (error) {
-    res.status(500).json(error);
-  }
-};
-
-module.exports = { registerUser, loginUser, findUser, getUsers };
+module.exports = { registerUser, authUser };

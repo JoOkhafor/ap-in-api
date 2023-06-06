@@ -9,6 +9,10 @@ const createToken = (_id) => {
   return jwt.sign({ _id }, jwtkey, { expiresIn: "1h" });
 };
 
+const userToken = (_id) => {
+  return jwt.sign({ _id }, jwtkey, { expiresIn: "5h" });
+};
+
 /**
  * @param {string} token
  * @return {object}
@@ -31,4 +35,4 @@ function tokenCheck(token) {
   }
 }
 
-module.exports = { createToken, tokenCheck };
+module.exports = { createToken, userToken, tokenCheck };
