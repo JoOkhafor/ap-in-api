@@ -58,18 +58,7 @@ const authUser = async (req, res) => {
   try {
     const { email, password } = req.body;
     const authToken = req.headers?.authorization?.split(" ")[1];
-    if (authToken) {
-      const { _id } = jwt.verify(authToken ?? authToken, SECRET_KEY);
-      const authUser = await userModel.findOne(
-        { _id },
-        { _id: 0, password: 0 }
-      );
-      if (!authUser)
-        return res.status(404).send({ message: "User not found!" });
-      return res
-        .status(200)
-        .send({ user: authUser, token: authToken ?? authToken });
-    }
+    
     if (email && password) {
       const loginUser = await userModel.findOne({ email }, {});
       if (!loginUser)
@@ -83,6 +72,19 @@ const authUser = async (req, res) => {
         user: { ...loginUser._doc, password: null, _id: null },
         token: loginToken,
       });
+    }
+
+    if (authToken) {
+      const { _id } = jwt.verify(authToken ?? authToken, SECRET_KEY);
+      const authUser = await userModel.findOne(
+        { _id },
+        { _id: 0, password: 0 }
+      );
+      if (!authUser)
+        return res.status(404).send({ message: "User not found!" });
+      return res
+        .status(200)
+        .send({ user: authUser, token: authToken ?? authToken });
     }
     if (!email || !password)
       return res.status(401).send({ message: "All fields are required!" });
