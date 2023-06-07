@@ -71,7 +71,7 @@ const authUser = async (req, res) => {
         .send({ user: authUser, token: authToken ?? authToken });
     }
     if (email && password) {
-      const loginUser = await userModel.findOne({ email }, { _id: 0 });
+      const loginUser = await userModel.findOne({ email }, {});
       if (!loginUser)
         return res.status(401).send({
           message: "Invalid email or password!",
@@ -80,7 +80,7 @@ const authUser = async (req, res) => {
         return res.status(401).send({ message: "Invalid email or password!" });
       const loginToken = userToken(loginUser._id);
       return res.status(200).send({
-        user: { ...loginUser._doc, password: null },
+        user: { ...loginUser._doc, password: null, _id: null },
         token: loginToken,
       });
     }
