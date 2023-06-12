@@ -1,17 +1,20 @@
 [{
   "_id": {
-    "$oid": "6414471f78dfc79df4172cb5"
+    "$oid": "647f952b70dafc004fdecf61"
   },
+  "firstName": "Admin",
+  "lastName": "",
   "email": "admin@gmail.com",
-  "password": "$2b$10$OtVwFMQgOCnTqfx4bMmooOzU8D4Z/08yuv65w/65Uui13s2AOmy1u",
+  "password": "$2b$10$FEPnUXtuHB8ojSDKs/htRe3Hbr56QrHEt2TuD4LL/HqwYJg8G33KW",
+  "role": "ADMIN",
   "createdAt": {
     "$date": {
-      "$numberLong": "1679050527960"
+      "$numberLong": "1686082859582"
     }
   },
   "updatedAt": {
     "$date": {
-      "$numberLong": "1679050527960"
+      "$numberLong": "1686082859582"
     }
   },
   "__v": 0

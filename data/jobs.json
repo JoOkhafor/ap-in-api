@@ -17,13 +17,14 @@
   },
   "updatedAt": {
     "$date": {
-      "$numberLong": "1680099471080"
+      "$numberLong": "1685993386059"
     }
   },
   "__v": 0,
   "description": "In order to better manage the company, the partners are looking for a new profile. The profile sought is that of an Office manager...",
   "worktime": "Full Time",
-  "worktype": "Remote"
+  "worktype": "Remote",
+  "views": 6
 },{
   "_id": {
     "$oid": "6424890c8660a35cf20b771e"
@@ -43,13 +44,14 @@
   },
   "updatedAt": {
     "$date": {
-      "$numberLong": "1680115980470"
+      "$numberLong": "1686338853072"
     }
   },
   "__v": 0,
   "description": "In order to better manage the company, the partners are looking for a new profile. The profile sought is that of an communication manager...",
   "worktime": "Full Time",
-  "worktype": "Remote"
+  "worktype": "Remote",
+  "views": 4
 },{
   "_id": {
     "$oid": "64248a528660a35cf20b7727"
@@ -69,13 +71,14 @@
   },
   "updatedAt": {
     "$date": {
-      "$numberLong": "1680116306920"
+      "$numberLong": "1685994724035"
     }
   },
   "__v": 0,
   "description": "n order to better manage the company, the partners are looking for a new profile. The profile sought is that of a Project Manager..",
   "worktime": "Full Time",
-  "worktype": "Remote"
+  "worktype": "Remote",
+  "views": 10
 },{
   "_id": {
     "$oid": "64248ced8660a35cf20b772f"
@@ -95,13 +98,14 @@
   },
   "updatedAt": {
     "$date": {
-      "$numberLong": "1680116973758"
+      "$numberLong": "1685995875663"
     }
   },
   "__v": 0,
   "description": "In order to better manage the company, the partners are looking for a new profile. The profile sought is that of a Technical sales representative...",
   "worktime": "Full Time",
-  "worktype": "Remote"
+  "worktype": "Remote",
+  "views": 6
 },{
   "_id": {
     "$oid": "6478669f8717fd2f8160dbba"
@@ -124,10 +128,11 @@
   },
   "updatedAt": {
     "$date": {
-      "$numberLong": "1685612191631"
+      "$numberLong": "1685961525740"
     }
   },
-  "__v": 0
+  "__v": 0,
+  "views": 2
 },{
   "_id": {
     "$oid": "6478671e8717fd2f8160dbbf"
@@ -150,8 +155,9 @@
   },
   "updatedAt": {
     "$date": {
-      "$numberLong": "1685612318239"
+      "$numberLong": "1685993443192"
     }
   },
-  "__v": 0
+  "__v": 0,
+  "views": 4
 }]
