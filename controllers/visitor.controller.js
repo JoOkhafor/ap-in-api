@@ -9,7 +9,6 @@ async function incrementVisitorCount(req, res) {
   if (!page) return res.status(200).end();
   const { ok } = tokenCheck(token);
   if (ok) return res.status(200).send();
-  console.log({ page, token });
 
   try {
     const item = await Visitor.findOne({ page, year, month });
@@ -24,7 +23,6 @@ async function incrementVisitorCount(req, res) {
     const newToken = createToken(page);
     return res.status(200).send({ newToken });
   } catch (err) {
-    console.log(err);
     res.send({ message: err?.message });
   }
 }
