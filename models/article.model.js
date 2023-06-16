@@ -7,6 +7,7 @@ const articleSchema = new Schema(
     publish_date: { type: Date, required: true, default: new Date() },
     author: { type: String, required: true },
     details: { type: String, required: true },
+    views: { type: Number, required: true },
   },
   { timestamps: true }
 );
