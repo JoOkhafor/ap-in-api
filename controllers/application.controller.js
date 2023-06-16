@@ -1,4 +1,3 @@
-const path = require("path");
 const ApplicationModel = require("../models/application.model");
 const fs = require("fs");
 
