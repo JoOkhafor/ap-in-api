@@ -8,7 +8,7 @@ const pdfFileStorage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     const ext = file.mimetype.split("/")[1];
-    cb(null, `resume-${req.body.fullname.split(' ')[0]}.${ext}`);
+    cb(null, `resume-${req.body.fullname.split(" ")[0]}.${ext}`);
   },
 });
 
@@ -25,7 +25,7 @@ const pdfFileFilter = (req, file, cb) => {
 const pdfUpload = multer({
   storage: pdfFileStorage,
   fileFilter: pdfFileFilter,
-})
+});
 
 //Configuration for Multer for picture
 const PictureStorage = multer.diskStorage({
@@ -40,7 +40,15 @@ const PictureStorage = multer.diskStorage({
 
 // Multer Filter for picture
 const PictureFilter = (req, file, cb) => {
-  if (file.mimetype.split("/")[1] === ("gif" || "webp" || "jpeg" || "jpg" || "png" || "svg" )  ) {
+  const filetype = file.mimetype.split("/")[1];
+  if (
+    filetype === "gif" ||
+    filetype === "webp" ||
+    filetype === "jpeg" ||
+    filetype === "jpg" ||
+    filetype === "png" ||
+    filetype === "svg"
+  ) {
     cb(null, true);
   } else {
     cb(new Error("Not a image File!!"), false);
@@ -51,6 +59,6 @@ const PictureFilter = (req, file, cb) => {
 const pictureUpload = multer({
   storage: PictureStorage,
   fileFilter: PictureFilter,
-})
+});
 
 module.exports = { pdfUpload, pictureUpload };
