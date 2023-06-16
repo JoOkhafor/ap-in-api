@@ -1,6 +1,7 @@
 const multer = require("multer");
+const { random } = require("../utils/random");
 
-//Configuration for Multer
+//Configuration for Multer for pdf file
 const pdfFileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads/docs");
@@ -11,7 +12,7 @@ const pdfFileStorage = multer.diskStorage({
   },
 });
 
-// Multer Filter
+// Multer Filter for pdf file
 const pdfFileFilter = (req, file, cb) => {
   if (file.mimetype.split("/")[1] === "pdf") {
     cb(null, true);
@@ -20,24 +21,24 @@ const pdfFileFilter = (req, file, cb) => {
   }
 };
 
-//Calling the "multer" Function
+//Calling the "multer" Function for pdf file
 const pdfUpload = multer({
   storage: pdfFileStorage,
   fileFilter: pdfFileFilter,
 })
 
-//Configuration for Multer
+//Configuration for Multer for picture
 const PictureStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/docs");
+    cb(null, "uploads/pictures");
   },
   filename: (req, file, cb) => {
     const ext = file.mimetype.split("/")[1];
-    cb(null, `resume-${req.body.fullname.split(' ')[0]}.${ext}`);
+    cb(null, `pic${random()}.${ext}`);
   },
 });
 
-// Multer Filter
+// Multer Filter for picture
 const PictureFilter = (req, file, cb) => {
   if (file.mimetype.split("/")[1] === ("gif" || "webp" || "jpeg" || "jpg" || "png" || "svg" )  ) {
     cb(null, true);
@@ -46,7 +47,7 @@ const PictureFilter = (req, file, cb) => {
   }
 };
 
-//Calling the "multer" Function
+//Calling the "multer" Function for picture
 const pictureUpload = multer({
   storage: PictureStorage,
   fileFilter: PictureFilter,
