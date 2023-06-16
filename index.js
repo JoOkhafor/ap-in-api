@@ -35,7 +35,7 @@ app.use("/quotes", quotesRoutes);
 app.use("/jobs", jobsRoutes);
 app.use("/applications", applicationsRoutes);
 app.use("/visits", visitsRoutes);
-app.use("/pictures", pictureRoutes);
+app.use("/picture", pictureRoutes);
 
 // Connection
 const PORT = process.env.PORT || 5000;
