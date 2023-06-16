@@ -11,6 +11,7 @@ const quotesRoutes = require("./routes/quote.routes");
 const jobsRoutes = require("./routes/jobs.routes");
 const applicationsRoutes = require("./routes/application.routes");
 const visitsRoutes = require("./routes/visit.routes");
+const pictureRoutes = require("./routes/picture.routes");
 
 // Mongo DB Connections
 require("./config/db");
@@ -34,6 +35,7 @@ app.use("/quotes", quotesRoutes);
 app.use("/jobs", jobsRoutes);
 app.use("/applications", applicationsRoutes);
 app.use("/visits", visitsRoutes);
+app.use("/pictures", pictureRoutes);
 
 // Connection
 const PORT = process.env.PORT || 5000;
