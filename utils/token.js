@@ -10,7 +10,7 @@ const createToken = (_id) => {
 };
 
 const userToken = (_id) => {
-  return jwt.sign({ _id }, jwtkey, { expiresIn: "5h" });
+  return jwt.sign({ _id }, jwtkey, { expiresIn: "24h" });
 };
 
 /**
