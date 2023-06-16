@@ -10,6 +10,6 @@ const router = Router();
 
 router.post("/upload", pictureUpload.single("file"), pictuteUploadMethod);
 router.get("/:filename", pictureDownloadMethod);
-router.get("/delete/:filename", pictureDeleteMethod);
+router.post("/delete/:filename", pictureDeleteMethod);
 
 module.exports = router;

@@ -1,3 +1,4 @@
+const fs = require("fs");
 const Picture = require("../models/picture.model");
 
 const pictuteUploadMethod = async (req, res) => {
@@ -37,10 +38,11 @@ const pictureDeleteMethod = async (req, res) => {
     return res.status(404).send({ message: "Not Found!" });
   }
   try {
-    const picture = await Picture.findOneAndDelete({ srcUrl });
+    const picture = await Picture.findOne({ srcUrl });
     fs.unlink(`uploads/pictures/${picture.srcUrl}`, (err) => {
       if (err) throw err;
     });
+    await Picture.deleteOne({ srcUrl });
     res.status(200).send({ message: "success!" });
   } catch (error) {
     res.status(500).send({ message: error.message });
