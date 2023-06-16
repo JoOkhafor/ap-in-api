@@ -14,13 +14,41 @@ const pictuteUploadMethod = async (req, res) => {
 
 const pictureDownloadMethod = async (req, res) => {
   const { filename: srcUrl } = req.params;
-  if (!filename) {
-    return res.status(400).send({ message: "Not Found!" });
+  if (!srcUrl) {
+    return res.status(404).send({ message: "Not Found!" });
   }
   try {
     const picture = await Picture.findOne({ srcUrl });
-    res.status(200).send(picture);
+    res
+      .set({
+        Headers: {
+          "Content-Type": "application/pdf",
+        },
+      })
+      .download(`uploads/pictures/${picture?.srcUrl}`);
   } catch (error) {
     res.status(500).send({ message: error.message });
   }
+};
+
+const pictureDeleteMethod = async (req, res) => {
+  const { filename: srcUrl } = req.params;
+  if (!srcUrl) {
+    return res.status(404).send({ message: "Not Found!" });
+  }
+  try {
+    const picture = await Picture.findOneAndDelete({ srcUrl });
+    fs.unlink(`uploads/pictures/${picture.srcUrl}`, (err) => {
+      if (err) throw err;
+    });
+    res.status(200).send({ message: "success!" });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+};
+
+module.exports = {
+  pictureDeleteMethod,
+  pictureDownloadMethod,
+  pictuteUploadMethod,
 };
