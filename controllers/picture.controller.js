@@ -40,7 +40,7 @@ const pictureDeleteMethod = async (req, res) => {
   try {
     const picture = await Picture.findOne({ srcUrl });
     fs.unlink(`uploads/pictures/${picture.srcUrl}`, (err) => {
-      if (err) throw err;
+      if (err) return res.status(404).send({ message: "Not Found!" });
     });
     await Picture.deleteOne({ srcUrl });
     res.status(200).send({ message: "success!" });

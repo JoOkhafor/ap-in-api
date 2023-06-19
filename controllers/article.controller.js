@@ -1,12 +1,12 @@
 const articleModel = require("../models/article.model");
 
 const uploadArticle = async (req, res) => {
-  const body = req.body;
-  if (!body) {
+  const { title, bannerImg, category, author, details } = req.body;
+  if (!title || !bannerImg || !author || !details) {
     return res.status(401).send({ message: "No content provided !" });
   }
   try {
-    await articleModel.create(body);
+    await articleModel.create({ title, bannerImg, category, author, details });
     res.status(200).send({ message: "success!" });
   } catch (error) {
     return res.status(401).send({ message: error?.message });
@@ -19,7 +19,11 @@ const viewArticle = async function (req, res) {
     return res.status(401).send({ message: "No specifications !" });
   }
   try {
-    const article = articleModel.findOne({ title });
+    const update = await articleModel.findOne({ title });
+    if (update) {
+      await articleModel.updateOne({ title }, { views: update?.views + 1 });
+    }
+    const article = await articleModel.findOne({ title });
     if (!article) {
       return res.status(404).send({ message: "Not found!" });
     }
@@ -35,7 +39,7 @@ const deleteArticle = async function (req, res) {
     return res.status(401).send({ message: "No specifications !" });
   }
   try {
-    const article = articleModel.findOne({ title }, { _id: 0 });
+    const article = await articleModel.findOne({ title }, { _id: 0 });
     if (!article) {
       return res.status(404).send({ message: "Not found!" });
     }
@@ -47,7 +51,7 @@ const deleteArticle = async function (req, res) {
 
 const allArticles = async function (req, res) {
   try {
-    const articles = articleModel.find();
+    const articles = await articleModel.find();
     if (!articles) {
       return res.status(404).send({ message: "Not found!" });
     }
