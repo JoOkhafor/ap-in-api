@@ -1,5 +1,5 @@
 const multer = require("multer");
-const { random } = require("../utils/random");
+const { now } = require("../utils/date");
 
 //Configuration for Multer for pdf file
 const pdfFileStorage = multer.diskStorage({
@@ -34,7 +34,7 @@ const PictureStorage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     const ext = file.mimetype.split("/")[1];
-    cb(null, `pic${random()}.${ext}`);
+    cb(null, `pic${now()}.${ext}`);
   },
 });
 

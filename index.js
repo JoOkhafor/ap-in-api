@@ -12,6 +12,7 @@ const jobsRoutes = require("./routes/jobs.routes");
 const applicationsRoutes = require("./routes/application.routes");
 const visitsRoutes = require("./routes/visit.routes");
 const pictureRoutes = require("./routes/picture.routes");
+const articleRoutes = require("./routes/article.routes");
 
 // Mongo DB Connections
 require("./config/db");
@@ -29,13 +30,14 @@ app.use(
 require("./utils/errorhandling");
 
 // Routes
-app.use("/users", userRouter);
-app.use("/newsletters", newsletterRoutes);
-app.use("/quotes", quotesRoutes);
-app.use("/jobs", jobsRoutes);
-app.use("/applications", applicationsRoutes);
-app.use("/visits", visitsRoutes);
-app.use("/picture", pictureRoutes);
+app.use("/api/v1/users", userRouter);
+app.use("/api/v1/newsletters", newsletterRoutes);
+app.use("/api/v1/quotes", quotesRoutes);
+app.use("/api/v1/jobs", jobsRoutes);
+app.use("/api/v1/applications", applicationsRoutes);
+app.use("/api/v1/visits", visitsRoutes);
+app.use("/api/v1/picture", pictureRoutes);
+app.use("/api/v1/article", articleRoutes);
 
 // Connection
 const PORT = process.env.PORT || 5000;
