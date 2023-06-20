@@ -34,16 +34,16 @@ const pictureDownloadMethod = async (req, res) => {
 
 const pictureDeleteMethod = async (req, res) => {
   const { filename: srcUrl } = req.params;
+  let fileError
   if (!srcUrl) {
     return res.status(404).send({ message: "Not Found!" });
   }
   try {
-    const picture = await Picture.findOne({ srcUrl });
+    const picture = await Picture.findOneAndDelete({ srcUrl });
     fs.unlink(`uploads/pictures/${picture.srcUrl}`, (err) => {
-      if (err) return res.status(404).send({ message: "Not Found!" });
+      if(err) fileError = err?.message 
     });
-    await Picture.deleteOne({ srcUrl });
-    res.status(200).send({ message: "success!" });
+    res.status(200).send({ message: fileError || "success!" });
   } catch (error) {
     res.status(500).send({ message: error.message });
   }

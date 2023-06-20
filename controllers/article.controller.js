@@ -1,3 +1,4 @@
+const fs = require("fs");
 const articleModel = require("../models/article.model");
 
 const uploadArticle = async (req, res) => {
@@ -23,7 +24,7 @@ const viewArticle = async function (req, res) {
     if (update) {
       await articleModel.updateOne({ title }, { views: update?.views + 1 });
     }
-    const article = await articleModel.findOne({ title });
+    const article = await articleModel.findOne({ title }, { _id: 0 });
     if (!article) {
       return res.status(404).send({ message: "Not found!" });
     }
@@ -35,15 +36,19 @@ const viewArticle = async function (req, res) {
 
 const deleteArticle = async function (req, res) {
   const { title } = req.params;
+  let errorr;
   if (!title) {
     return res.status(401).send({ message: "No specifications !" });
   }
   try {
-    const article = await articleModel.findOne({ title }, { _id: 0 });
+    const article = await articleModel.findOneAndDelete({ title });
     if (!article) {
       return res.status(404).send({ message: "Not found!" });
     }
-    res.status(200).send({ message: "Success" });
+    fs.unlink(`uploads/pictures/${article?.bannerImg}`, (err) => {
+      if (err) errorr = err?.message;
+    });
+    res.status(200).send({ message: errorr || "Success" });
   } catch (error) {
     return res.status(401).send({ message: error?.message });
   }

@@ -10,7 +10,7 @@ const router = Router();
 
 router.post("/upload", uploadArticle);
 router.get("/view/:title", viewArticle);
-router.get("/delete/:title", deleteArticle);
-router.post("/", allArticles);
+router.post("/delete/:title", deleteArticle);
+router.get("/", allArticles);
 
 module.exports = router;
