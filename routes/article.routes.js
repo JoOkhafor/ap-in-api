@@ -9,7 +9,7 @@ const {
 const router = Router();
 
 router.post("/upload", uploadArticle);
-router.get("/view/:title", viewArticle);
+router.get("/:title", viewArticle);
 router.post("/delete/:title", deleteArticle);
 router.get("/", allArticles);
 
