@@ -1,6 +1,8 @@
 const multer = require("multer");
 const { now } = require("../utils/date");
 
+// ************************
+
 //Configuration for Multer for pdf file
 const pdfFileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -26,6 +28,8 @@ const pdfUpload = multer({
   storage: pdfFileStorage,
   fileFilter: pdfFileFilter,
 });
+
+// ************************
 
 //Configuration for Multer for picture
 const PictureStorage = multer.diskStorage({
@@ -61,4 +65,24 @@ const pictureUpload = multer({
   fileFilter: PictureFilter,
 });
 
-module.exports = { pdfUpload, pictureUpload };
+// ************************
+
+//Configuration for Multer for audio file
+const audioStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/audios");
+  },
+  filename: (req, file, cb) => {
+    const ext = file.mimetype.split("/")[1];
+    cb(null, `audio-${now()}.${ext}`);
+  },
+});
+
+// calling multer function function for audio files
+const audioUpload = multer({
+  storage: audioStorage,
+});
+
+// ************************
+
+module.exports = { pdfUpload, pictureUpload, audioUpload };

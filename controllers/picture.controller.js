@@ -23,7 +23,7 @@ const pictureDownloadMethod = async (req, res) => {
     res
       .set({
         Headers: {
-          "Content-Type": "application/pdf",
+          "Content-Type": "image/jpeg/png/gif",
         },
       })
       .download(`uploads/pictures/${picture?.srcUrl}`);

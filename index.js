@@ -13,6 +13,7 @@ const applicationsRoutes = require("./routes/application.routes");
 const visitsRoutes = require("./routes/visit.routes");
 const pictureRoutes = require("./routes/picture.routes");
 const articleRoutes = require("./routes/article.routes");
+const audioRoutes = require("./routes/audio.routes")
 
 // Mongo DB Connections
 require("./config/db");
@@ -38,6 +39,7 @@ app.use("/api/v1/applications", applicationsRoutes);
 app.use("/api/v1/visits", visitsRoutes);
 app.use("/api/v1/picture", pictureRoutes);
 app.use("/api/v1/article", articleRoutes);
+app.use("/api/v1/audio", audioRoutes);
 
 // Connection
 const PORT = process.env.PORT || 5000;
