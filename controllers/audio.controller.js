@@ -4,7 +4,6 @@ const AudioFile = require("../models/audio.model");
 const audioFileUpload = async (req, res) => {
   if (!req.file)
     return res.status(400).send({ message: "Please provide a picture !" });
-
   try {
     const audio = await AudioFile.create({ srcUrl: req?.file?.filename });
     res.status(200).send(audio);

@@ -2,12 +2,28 @@ const fs = require("fs");
 const articleModel = require("../models/article.model");
 
 const uploadArticle = async (req, res) => {
-  const { title, bannerImg, category, author, details } = req.body;
-  if (!title || !bannerImg || !author || !details) {
-    return res.status(401).send({ message: "No content provided !" });
+  const {
+    title,
+    bannerImg,
+    category,
+    author,
+    details,
+    audiofile,
+    description,
+  } = req.body;
+  if (!title || !category || !author) {
+    return res.status(401).send({ message: "All fields are required !" });
   }
   try {
-    await articleModel.create({ title, bannerImg, category, author, details });
+    await articleModel.create({
+      title,
+      bannerImg,
+      category,
+      author,
+      details,
+      audiofile,
+      description,
+    });
     res.status(200).send({ message: "success!" });
   } catch (error) {
     return res.status(401).send({ message: error?.message });

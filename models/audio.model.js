@@ -8,12 +8,12 @@ const audioFile = new mongoose.Schema(
     },
     alt: {
       type: String,
-      default: "image",
+      default: "audio",
     },
   },
   { timestamps: true }
 );
 
-const AudioFile = mongoose.model("audiofiles", audioFile);
+const AudioFile = mongoose.model("audios", audioFile);
 
 module.exports = AudioFile;

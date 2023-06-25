@@ -8,7 +8,7 @@ const { audioUpload } = require("../uploads/multer");
 
 const router = Router();
 
-router.post("/upload", audioUpload, audioFileUpload);
+router.post("/upload", audioUpload.single('file'), audioFileUpload);
 router.get("/:filename", audioFileStream);
 router.post("/delete/:filename", audioDeletion);
 
