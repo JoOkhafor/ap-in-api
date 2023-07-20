@@ -7,8 +7,7 @@ const user = new mongoose.Schema(
       required: true,
     },
     profile: {
-      imgUrl: String,
-      imgAlt: String,
+      srcUrl: String,
     },
     country: String,
     address: String,
