@@ -108,7 +108,7 @@ const updateUser = async (req, res) => {
     const userUpdated = await userModel.updateOne(
       { email },
       {
-        fullname,
+        fullName,
         password,
         address,
         country,
