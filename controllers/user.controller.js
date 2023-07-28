@@ -9,9 +9,12 @@ const SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 // Register a new user
 const registerUser = async (req, res) => {
-  let { firstName, lastName, email, password } = req.body;
+  let { fullName, email, password, address, country, phone_number, profile } =
+    req.body;
   if (!email || !password)
-    return res.status(404).json({ message: "All fields are required..." });
+    return res
+      .status(404)
+      .json({ message: "Password and email fields are required..." });
   try {
     let oldUser = await userModel.findOne({ email });
     if (oldUser) {
@@ -27,7 +30,7 @@ const registerUser = async (req, res) => {
       !validator.isStrongPassword(password, {
         minSymbols: 0,
         minLength: 5,
-        minUppercase: 0,
+        minUppercase: 1,
         minNumbers: 1,
       })
     ) {
@@ -37,10 +40,13 @@ const registerUser = async (req, res) => {
     }
     password = await encrypt(password);
     const newUser = new userModel({
-      firstName,
-      lastName,
+      fullName,
       email,
       password,
+      address,
+      country,
+      phone_number,
+      profile,
     });
     await newUser.save();
     const user = await userModel.findOne({ email }, { _id: 0, password: 0 });
@@ -54,11 +60,12 @@ const registerUser = async (req, res) => {
   }
 };
 
+// authenticate a user
 const authUser = async (req, res) => {
   try {
     const { email, password } = req.body;
     const authToken = req.headers?.authorization?.split(" ")[1];
-    
+
     if (email && password) {
       const loginUser = await userModel.findOne({ email }, {});
       if (!loginUser)
@@ -93,4 +100,56 @@ const authUser = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, authUser };
+const updateUser = async (req, res) => {
+  const { fullName, email, password, address, country, phone_number, profile } =
+    req.body;
+
+  try {
+    const userUpdated = await userModel.updateOne(
+      { email },
+      {
+        fullName,
+        password,
+        address,
+        country,
+        phone_number,
+        profile,
+      }
+    );
+    res.status(200).send({ user: userUpdated });
+  } catch (error) {
+    res.status(error?.status).send({ message: error?.message });
+  }
+};
+const removeUser = async (req, res) => {
+  const { email } = req.body;
+  try {
+    await userModel.deleteOne({ email });
+    res.status(200).send({ message: "Deleted successfully !" });
+  } catch (error) {
+    res.status(error?.status).send({ message: error?.message });
+  }
+};
+
+const allUsers = async (req, res) => {
+  const authToken = req.headers?.authorization?.split(" ")[1];
+
+  try {
+    if (authToken) {
+      const { _id } = jwt.verify(authToken ?? authToken, SECRET_KEY);
+      const authUser = await userModel.findOne(
+        { _id },
+        { _id: 0, password: 0 }
+      );
+      if (!authUser?.role === "ADMIN")
+        return res.status(402).send({ message: "Unauthorized!" });
+
+      const users = await userModel.find({ _id: { $ne: _id } }, { _id: 0 });
+      return res.status(200).send({ users });
+    }
+  } catch (error) {
+    return res.status(500).send({ message: error.message });
+  }
+};
+
+module.exports = { registerUser, authUser, updateUser, removeUser, allUsers };
