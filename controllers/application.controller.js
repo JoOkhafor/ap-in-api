@@ -3,13 +3,13 @@ const fs = require("fs");
 
 const getApplications = async (req, res) => {
   const { jobId } = req.params;
-  const { length } = req.query;
-  console.log(length);
+  // const { length } = req.query;
+  // console.log(length);
   try {
     const data = await ApplicationModel.find({ jobId });
-    if (!data.length)
-      return res.status(404).send({ message: "No data found!" });
-    if (length) return res.status(200).send({ amount: data.length });
+    // if (!data.length)
+    //   return res.status(404).send({ message: "No data found!" });
+    // if (length) return res.status(200).send({ amount: data.length });
     res.status(200).send(data);
   } catch (error) {
     res.status(500).send({ message: error.message });
@@ -42,7 +42,7 @@ const ApplicationRegister = async (req, res) => {
     const application = await ApplicationModel.findOne({ email });
     if (application) {
       fs.unlink(`uploads/docs/${req.file.filename}`, (err) => {
-        if (err) throw err;
+        if (err)  console.log(err);
       });
       return res.status(402).send({
         message: "Seems like someone with this email already applied !",
