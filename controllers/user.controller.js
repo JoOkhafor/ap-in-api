@@ -103,10 +103,20 @@ const authUser = async (req, res) => {
 const updateUser = async (req, res) => {
   const { fullName, email, password, address, country, phone_number, profile } =
     req.body;
-
+  const authToken = req.headers?.authorization?.split(" ")[1];
   try {
+    let userEmail0;
+    if (authToken && email) {
+      const { _id } = jwt.verify(authToken ?? authToken, SECRET_KEY);
+      const { email } = await userModel.findOne(
+        { _id },
+        { _id: 0, password: 0 }
+      );
+      userEmail0 = email;
+    }
+
     const userUpdated = await userModel.updateOne(
-      { email },
+      { userEmail0 },
       {
         fullName,
         password,
@@ -118,7 +128,7 @@ const updateUser = async (req, res) => {
     );
     res.status(200).send({ user: userUpdated });
   } catch (error) {
-    res.status(error?.status).send({ message: error?.message });
+    res.status(401).send({ message: error?.message });
   }
 };
 const removeUser = async (req, res) => {
