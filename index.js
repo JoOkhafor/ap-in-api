@@ -19,7 +19,9 @@ const audioRoutes = require("./routes/audio.routes")
 require("./config/db");
 
 // Middleware Connections
-app.use(cors());
+app.use(cors({
+  origin: "*"
+}));
 app.use(express.json());
 app.use(
   bodyParser.urlencoded({
