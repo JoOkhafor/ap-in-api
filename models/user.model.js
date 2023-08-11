@@ -6,9 +6,7 @@ const user = new mongoose.Schema(
       type: String,
       required: true,
     },
-    profile: {
-      srcUrl: String,
-    },
+    profile: String,
     country: String,
     address: String,
     phone_number: String,

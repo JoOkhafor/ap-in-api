@@ -7,6 +7,6 @@ const {
 const router = Router();
 
 router.get("/", incrementVisitorCount);
-router.get("/get", getVisitorCount);
+router.get("/get/:page", getVisitorCount);
 
 module.exports = router;
