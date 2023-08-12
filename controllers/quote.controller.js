@@ -1,4 +1,6 @@
 const Quotes = require("../models/quote.model");
+const Visitor = require("../models/visitor.model");
+const { incrementVisitorCount } = require("./visitor.controller");
 
 /**
 |--------------------------------------------------
@@ -15,6 +17,9 @@ const registerQuote = async (req, res) => {
         service,
         description,
     } = req.body;
+    const now = new Date().toISOString();
+    const [year, month] = now.split("-");
+    const page = 'quote'
     try {
         const isResgistered = await Quotes.findOne({ email });
         if (isResgistered)
@@ -31,6 +36,15 @@ const registerQuote = async (req, res) => {
             description,
         });
         await newQuote.save();
+        const item = await Visitor.findOne({ page, year, month });
+        if (!item) {
+          await Visitor.create({ page, year, month, number: 1 });
+        } else if (item) {
+          await Visitor.updateOne(
+            { _id: item?._id },
+            { $set: { number: parseInt(item?.number) + 1 } }
+          );
+        }
         res.status(200).send({ message: "Registered successfully!!" });
     } catch (error) {
         res.status(500).send({ error: "Une erreur est survenue" });
