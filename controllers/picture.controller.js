@@ -20,7 +20,17 @@ const pictureDownloadMethod = async (req, res) => {
   }
   try {
     const picture = await Picture.findOne({ srcUrl });
-    res
+    if (!picture) {
+      return res
+        .status(404)
+        .set({
+          Headers: {
+            "Content-Type": "image/jpeg/png/gif",
+          },
+        })
+        .send({ message: "Not found!" });
+    }
+    return res
       .set({
         Headers: {
           "Content-Type": "image/jpeg/png/gif",
@@ -34,14 +44,14 @@ const pictureDownloadMethod = async (req, res) => {
 
 const pictureDeleteMethod = async (req, res) => {
   const { filename: srcUrl } = req.params;
-  let fileError
+  let fileError;
   if (!srcUrl) {
     return res.status(404).send({ message: "Not Found!" });
   }
   try {
     const picture = await Picture.findOneAndDelete({ srcUrl });
     fs.unlink(`uploads/pictures/${picture.srcUrl}`, (err) => {
-      if(err) fileError = err?.message 
+      if (err) fileError = err?.message;
     });
     res.status(200).send({ message: fileError || "success!" });
   } catch (error) {

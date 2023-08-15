@@ -1,20 +1,29 @@
 const fs = require("fs");
 const articleModel = require("../models/article.model");
+const jwt = require("jsonwebtoken");
+const userModel = require("../models/user.model");
+
+const SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 const uploadArticle = async (req, res) => {
-  const {
-    title,
-    bannerImg,
-    category,
-    author,
-    details,
-    audiofile,
-    description,
-  } = req.body;
-  if (!title || !category || !author) {
+  const { title, bannerImg, category, details, audiofile, description } =
+    req.body;
+  const token = req.headers?.authorization?.split(" ")[1];
+  if (!title || !category) {
     return res.status(401).send({ message: "All fields are required !" });
   }
+  if (!token) {
+    return res.status(401).send({ message: "user not authenticated" });
+  }
   try {
+    const { _id } = jwt.verify(token ?? token, SECRET_KEY);
+    const author = await userModel.findOne(
+      { _id },
+      { _id: 0, password: 0, role: 0 }
+    );
+    if (!author) {
+      return res.status(401).send({ message: "user not authenticated!" });
+    }
     await articleModel.create({
       title,
       bannerImg,
@@ -40,6 +49,22 @@ const viewArticle = async function (req, res) {
     if (update) {
       await articleModel.updateOne({ title }, { views: update?.views + 1 });
     }
+    const article = await articleModel.findOne({ title }, { _id: 0 });
+    if (!article) {
+      return res.status(404).send({ message: "Not found!" });
+    }
+    res.status(200).send({ article });
+  } catch (error) {
+    return res.status(401).send({ message: error?.message });
+  }
+};
+
+const getOneArticle = async function (req, res) {
+  const { title } = req.params;
+  if (!title) {
+    return res.status(401).send({ message: "No specifications !" });
+  }
+  try {
     const article = await articleModel.findOne({ title }, { _id: 0 });
     if (!article) {
       return res.status(404).send({ message: "Not found!" });
@@ -82,4 +107,10 @@ const allArticles = async function (req, res) {
   }
 };
 
-module.exports = { allArticles, viewArticle, deleteArticle, uploadArticle };
+module.exports = {
+  allArticles,
+  viewArticle,
+  deleteArticle,
+  uploadArticle,
+  getOneArticle,
+};
