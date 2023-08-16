@@ -101,36 +101,76 @@ const authUser = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  const { fullName, email, password, address, country, phone_number, profile } =
-    req.body;
+  const { fullName, email, address, country, phone_number, profile } = req.body;
+
   const authToken = req.headers?.authorization?.split(" ")[1];
   try {
-    let userEmail0;
-    if (authToken && email) {
+    if (authToken) {
       const { _id } = jwt.verify(authToken ?? authToken, SECRET_KEY);
       const { email } = await userModel.findOne(
         { _id },
         { _id: 0, password: 0 }
       );
-      userEmail0 = email;
+      const userUpdated = await userModel.updateOne(
+        { email },
+        {
+          fullName,
+          address,
+          country,
+          phone_number,
+          profile,
+        }
+      );
+      res.status(200).send({ user: userUpdated.modifiedCount });
     }
-
-    const userUpdated = await userModel.updateOne(
-      { userEmail0 },
-      {
-        fullName,
-        password,
-        address,
-        country,
-        phone_number,
-        profile,
-      }
-    );
-    res.status(200).send({ user: userUpdated });
   } catch (error) {
     res.status(401).send({ message: error?.message });
   }
 };
+
+const updatePwd = async (req, res) => {
+  const { old_pass, new_pass } = req.body;
+
+  if (!old_pass || !new_pass) {
+    return res.status(401).send({ message: "All fileds required!" });
+  }
+
+  const authToken = req.headers?.authorization?.split(" ")[1];
+  try {
+    if (authToken) {
+      const { _id } = jwt.verify(authToken ?? authToken, SECRET_KEY);
+      const { password } = await userModel.findOne({ _id }, { _id: 0 });
+
+      if (old_pass || new_pass) {
+        if (!(await pwdCompare(old_pass, password)))
+          return res.status(401).send({ message: "Invalid password!" });
+        if (
+          !validator.isStrongPassword(new_pass, {
+            minSymbols: 0,
+            minLength: 5,
+            minUppercase: 1,
+            minNumbers: 1,
+          })
+        ) {
+          return res
+            .status(404)
+            .json({ message: "Password must be strong password..." });
+        }
+        const new_password = await encrypt(new_pass);
+        const user = await userModel.updateOne(
+          { _id },
+          { password: new_password }
+        );
+        res.status(200).send({ user });
+      } else {
+        return res.status(401).send({ message: "All fileds required!" });
+      }
+    }
+  } catch (error) {
+    res.status(401).send({ message: error?.message });
+  }
+};
+
 const removeUser = async (req, res) => {
   const { email } = req.body;
   try {
@@ -162,4 +202,11 @@ const allUsers = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, authUser, updateUser, removeUser, allUsers };
+module.exports = {
+  registerUser,
+  authUser,
+  updateUser,
+  removeUser,
+  updatePwd,
+  allUsers,
+};

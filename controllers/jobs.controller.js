@@ -8,10 +8,30 @@ const JobModel = require("../models/job.model");
 const getOneJob = async (req, res) => {
   const { title } = req.params;
   if (!title) return res.status(401).send({ message: "Unauthorized!" });
+  const token = req.headers?.authorization?.split(" ")[1];
+  console.log({ logan: req.headers?.authorization });
   try {
     const job = await JobModel.findOne({ title });
     if (!job) return res.status(404).send({ message: "Data not found!" });
     await JobModel.updateOne({ _id: job?._id }, { views: job?.views + 1 });
+    res.status(200).send(job);
+  } catch (error) {
+    res.status(500).send(error?.message);
+  }
+};
+/**
+|--------------------------------------------------
+| get one job
+|--------------------------------------------------
+*/
+const getJob = async (req, res) => {
+  const { title } = req.params;
+  if (!title) return res.status(401).send({ message: "Unauthorized!" });
+
+  try {
+    const job = await JobModel.findOne({ title });
+    if (!job) return res.status(404).send({ message: "Data not found!" });
+
     res.status(200).send(job);
   } catch (error) {
     res.status(500).send(error?.message);
@@ -99,4 +119,11 @@ const deleteJob = async (req, res) => {
   }
 };
 
-module.exports = { getOneJob, getJobs, addNewJob, updateJob, deleteJob };
+module.exports = {
+  getOneJob,
+  getJobs,
+  getJob,
+  addNewJob,
+  updateJob,
+  deleteJob,
+};

@@ -7,7 +7,7 @@ const articleSchema = new Schema(
     audiofile: { type: String },
     description: { type: String },
     category: { type: String, required: true },
-    author: { type: String, required: true, default: "Anonymous" },
+    author: { type: Object, required: true },
     details: { type: String },
     views: { type: Number, required: true, default: 0 },
   },

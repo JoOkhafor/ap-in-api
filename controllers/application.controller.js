@@ -16,6 +16,16 @@ const getApplications = async (req, res) => {
   }
 };
 
+const getNumbers = async (req, res) => {
+  const { jobId } = req.params;
+  try {
+    const data = await ApplicationModel.find({ jobId });
+    res.status(200).send({numbers: data?.length});
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+};
+
 const ApplicationRegister = async (req, res) => {
   const {
     fullname,
@@ -91,7 +101,7 @@ const deleteOneApplication = async (req, res) => {
     const data = await ApplicationModel.findOneAndDelete({ _id: id });
     if (!data) return res.status(404).send({ message: "Not Found!" });
     fs.unlink(`uploads/docs/${data.cv}`, (err) => {
-      if (err) throw err;
+      if (err) console.log(err);
     });
     res.status(200).send({ message: "deleted success!" });
   } catch (error) {
@@ -100,6 +110,7 @@ const deleteOneApplication = async (req, res) => {
 };
 
 module.exports = {
+  getNumbers,
   getApplications,
   ApplicationRegister,
   downloadFile,
