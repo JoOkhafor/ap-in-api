@@ -107,10 +107,24 @@ const allArticles = async function (req, res) {
   }
 };
 
+const getRelated = async (req, res) =>{
+  const {category} = req.params
+  if (category) {
+    return res.status(404).send("No category specified!")
+  }
+  try {
+    const related = await articleModel.find({category}).limit(6)
+    return res.status(200).send(related)
+  } catch (err) {
+    res.status(500).send({message: err?.message || "Internal Server error!"})
+  }
+}
+
 module.exports = {
   allArticles,
   viewArticle,
   deleteArticle,
   uploadArticle,
   getOneArticle,
+  getRelated
 };

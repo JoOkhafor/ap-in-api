@@ -5,6 +5,7 @@ const {
   viewArticle,
   deleteArticle,
   getOneArticle,
+  getRelated,
 } = require("../controllers/article.controller");
 
 const router = Router();
@@ -12,6 +13,7 @@ const router = Router();
 router.post("/upload", uploadArticle);
 router.get("/:title", viewArticle);
 router.get("/find/:title", getOneArticle);
+router.get("/category/:category", getRelated);
 router.post("/delete/:title", deleteArticle);
 router.get("/", allArticles);
 
