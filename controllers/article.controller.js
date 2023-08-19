@@ -109,7 +109,7 @@ const allArticles = async function (req, res) {
 
 const getRelated = async (req, res) =>{
   const {category} = req.params
-  if (category) {
+  if (!category) {
     return res.status(404).send("No category specified!")
   }
   try {

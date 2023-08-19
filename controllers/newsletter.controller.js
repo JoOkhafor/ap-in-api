@@ -1,5 +1,8 @@
 const NewsletterModel = require("../models/newsletter.model");
 const Visitor = require("../models/visitor.model");
+const fs = require("fs");
+const json2xls = require("json2xls");
+const filename = "emails.xlsx";
 
 /**
 |--------------------------------------------------
@@ -111,6 +114,32 @@ const updateEmail = async (req, res) => {
 };
 
 /**
+ * Exporting emails to sexcel file
+ */ 
+
+  const exportToXls = async (req, res) => {
+    try {
+      const emails = await NewsletterModel.find({}, {updatedAt: 0, _id: 0, __v: 0})
+      const xls = json2xls(emails);
+      fs.writeFileSync(filename, xls, "binary", (err) => {
+        if (err) {
+          console.log("writeFileSync :", err);
+        }
+        console.log(filename + " file is saved!");
+      });
+      res
+        .set({
+          Headers: {
+            "Content-Type": "document/xlsx",
+          },
+        })
+        .download(`${filename}`);
+    } catch (error) {
+      res.status(500).send({ message: "Something went wrong" });
+    }
+  }
+
+/**
 |--------------------------------------------------
 | exporting controllers
 |--------------------------------------------------
@@ -122,4 +151,5 @@ module.exports = {
   deleteEmail,
   deleteMany,
   updateEmail,
+  exportToXls
 };
