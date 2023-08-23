@@ -55,6 +55,28 @@ const getJobs = async (req, res) => {
 };
 
 /**
+ * available jobs
+ */
+
+const getAvailableJobs = async (req, res) => {
+  try {
+    const now = new Date();
+    const data = await JobModel.find();
+    let jobs = [];
+    data.forEach((e, i) => {
+      if (new Date(e.validity)?.getTime() > now.getTime()) {
+        jobs = [...jobs, e];
+      }
+    });
+    if (jobs.length == 0)
+      return res.status(404).send({ message: "No Jobs available!" });
+    res.status(200).send(jobs);
+  } catch (error) {
+    res.status(500).send(error?.message);
+  }
+};
+
+/**
 |--------------------------------------------------
 | add a new job to publish
 |--------------------------------------------------
@@ -126,4 +148,5 @@ module.exports = {
   addNewJob,
   updateJob,
   deleteJob,
+  getAvailableJobs
 };

@@ -1,6 +1,5 @@
 const Quotes = require("../models/quote.model");
 const Visitor = require("../models/visitor.model");
-const { incrementVisitorCount } = require("./visitor.controller");
 
 /**
 |--------------------------------------------------
@@ -21,11 +20,6 @@ const registerQuote = async (req, res) => {
     const [year, month] = now.split("-");
     const page = 'quote'
     try {
-        const isResgistered = await Quotes.findOne({ email });
-        if (isResgistered)
-            return res.status(402).json({
-                message: "Cet Email existe déjà dans note base de données!!",
-            });
         const newQuote = new Quotes({
             email,
             fullname,
