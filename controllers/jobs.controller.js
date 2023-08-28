@@ -46,8 +46,7 @@ const getJob = async (req, res) => {
 const getJobs = async (req, res) => {
   try {
     const jobs = await JobModel.find();
-    if (jobs.length == 0)
-      return res.status(404).send({ message: "Data not found!" });
+    
     res.status(200).send(jobs);
   } catch (error) {
     res.status(500).send(error?.message);
