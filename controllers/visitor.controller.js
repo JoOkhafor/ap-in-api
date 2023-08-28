@@ -4,7 +4,7 @@ const { tokenCheck, createToken } = require("../utils/token");
 async function incrementVisitorCount(req, res) {
   const now = new Date().toISOString();
   const [year, month] = now.split("-");
-  const { page, token } = req.query;z
+  const { page, token } = req.query;
 
   if (!page) return res.status(200).end();
   const { ok } = tokenCheck(token);
