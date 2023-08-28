@@ -115,29 +115,41 @@ const updateEmail = async (req, res) => {
 
 /**
  * Exporting emails to sexcel file
- */ 
+ */
 
-  const exportToXls = async (req, res) => {
-    try {
-      const emails = await NewsletterModel.find({}, {updatedAt: 0, _id: 0, __v: 0})
-      const xls = json2xls(emails);
-      fs.writeFileSync(filename, xls, "binary", (err) => {
-        if (err) {
-          console.log("writeFileSync :", err);
-        }
-        console.log(filename + " file is saved!");
-      });
-      res
-        .set({
-          Headers: {
-            "Content-Type": "document/xlsx",
-          },
-        })
-        .download(`${filename}`);
-    } catch (error) {
-      res.status(500).send({ message: "Something went wrong" });
-    }
+const exportToXls = async (req, res) => {
+  try {
+    const emails = await NewsletterModel.find(
+      {},
+      { updatedAt: 0, _id: 0, __v: 0 }
+    );
+
+    // emails & creation datas
+    let eData = emails.map((e, i) => {
+      return [e.email, e.createdAt];
+    });
+
+    let data = [["Emails", "created At"], ...eData];
+
+    const xls = json2xls(data, {});
+
+    fs.writeFileSync(filename, xls, "binary", (err) => {
+      if (err) {
+        console.log("writeFileSync :", err);
+      }
+      console.log(filename + " file is saved!");
+    });
+    res
+      .set({
+        Headers: {
+          "Content-Type": "document/xlsx",
+        },
+      })
+      .download(`${filename}`);
+  } catch (error) {
+    res.status(500).send("Something went wrong");
   }
+};
 
 /**
 |--------------------------------------------------
@@ -151,5 +163,5 @@ module.exports = {
   deleteEmail,
   deleteMany,
   updateEmail,
-  exportToXls
+  exportToXls,
 };
