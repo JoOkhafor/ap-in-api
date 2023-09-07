@@ -49,7 +49,7 @@ const ApplicationRegister = async (req, res) => {
   if (!req.file)
     return res.status(400).send({ message: "Please provide your CV file !" });
   try {
-    const application = await ApplicationModel.findOne({ email });
+    const application = await ApplicationModel.findOne({ email, jobId });
     if (application) {
       fs.unlink(`uploads/docs/${req.file.filename}`, (err) => {
         if (err)  console.log(err);
