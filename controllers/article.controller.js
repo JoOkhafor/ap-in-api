@@ -17,10 +17,7 @@ const uploadArticle = async (req, res) => {
   }
   try {
     const { _id } = jwt.verify(token ?? token, SECRET_KEY);
-    const author = await userModel.findOne(
-      { _id },
-      { _id: 0, password: 0, role: 0 }
-    );
+    const author = _id
     if (!author) {
       return res.status(401).send({ message: "user not authenticated!" });
     }
@@ -53,7 +50,9 @@ const viewArticle = async function (req, res) {
     if (!article) {
       return res.status(404).send({ message: "Not found!" });
     }
-    res.status(200).send({ article });
+    let { author } = article
+    const user = userModel.findOne({ author }, { _id: 0, password: 0 })
+    res.status(200).send({ article: { ...article._doc, author: user._doc } });
   } catch (error) {
     return res.status(401).send({ message: error?.message });
   }
@@ -107,16 +106,16 @@ const allArticles = async function (req, res) {
   }
 };
 
-const getRelated = async (req, res) =>{
-  const {category} = req.params
+const getRelated = async (req, res) => {
+  const { category } = req.params
   if (!category) {
     return res.status(404).send("No category specified!")
   }
   try {
-    const related = await articleModel.find({category}).limit(6)
+    const related = await articleModel.find({ category }).limit(6)
     return res.status(200).send(related)
   } catch (err) {
-    res.status(500).send({message: err?.message || "Internal Server error!"})
+    res.status(500).send({ message: err?.message || "Internal Server error!" })
   }
 }
 

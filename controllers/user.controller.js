@@ -4,7 +4,7 @@ const { userToken } = require("../utils/token");
 const { encrypt, pwdCompare } = require("../utils/bcrypt");
 const jwt = require("jsonwebtoken");
 
-//
+// 
 const SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 // Register a new user
